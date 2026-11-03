@@ -1,5 +1,15 @@
-ar CACHE = 'hanan-uang-v1';
-var ASSETS = ['./', './index.html', './manifest.json'];
+/**
+ * HANAN.UANG — Service Worker (PWA)
+ * Catatan penting:
+ * - Di Google Apps Script, halaman web berjalan di dalam iframe sandbox
+ *   (domain googleusercontent.com) sehingga service worker TIDAK BISA didaftarkan
+ *   dari sana. Registrasi di index.html sudah dibungkus try/catch jadi aman.
+ * - File ini aktif otomatis jika suatu saat Anda hosting file statis
+ *   (GitHub Pages / Netlify / hosting sendiri): letakkan service-worker.js
+ *   satu folder dengan index.html.
+ */
+var CACHE = 'hanan-uang-v2'; // versi dinaikkan: ikon PNG + manifest file asli (perbaikan iOS)
+var ASSETS = ['./', './index.html', './manifest.json', './app-bridge.html', './icon-192.png', './icon-512.png', './apple-touch-icon.png'];
 
 self.addEventListener('install', function (e) {
   e.waitUntil(
