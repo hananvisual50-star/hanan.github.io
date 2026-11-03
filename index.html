@@ -4,6 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#0a0a0c">
+  <!-- ==== PWA iOS (Safari hanya membaca manifest FILE asli + ikon PNG) ==== -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="HANAN.UANG">
+  <link rel="manifest" href="./manifest.json">
+  <link rel="apple-touch-icon" href="./apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
   <title>HANAN.UANG — Keuangan Pribadi</title>
   <style>
     html, body {
@@ -59,37 +67,11 @@
     allow="clipboard-write"></iframe>
 
   <script>
-    // ===== PWA shell (manifest + icon + service worker di halaman shell) =====
+    // ===== PWA shell (service worker; manifest + ikon sudah file asli di <head> agar iOS Safari terbaca) =====
     (function () {
       try {
-        var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="96" fill="#10b981"/><text x="256" y="345" font-family="Arial,sans-serif" font-size="270" font-weight="bold" fill="#06251f" text-anchor="middle">H</text></svg>';
-        var icon = 'data:image/svg+xml,' + encodeURIComponent(svg);
-        var man = {
-          name: 'HANAN.UANG — Keuangan Pribadi',
-          short_name: 'HANAN.UANG',
-          start_url: '.',
-          scope: '.',
-          display: 'standalone',
-          orientation: 'portrait',
-          background_color: '#0a0a0c',
-          theme_color: '#0a0a0c',
-          lang: 'id',
-          icons: [{ src: icon, sizes: 'any', type: 'image/svg+xml', purpose: 'any maskable' }]
-        };
-        var l = document.createElement('link');
-        l.rel = 'manifest';
-        l.href = 'data:application/manifest+json;charset=utf-8,' + encodeURIComponent(JSON.stringify(man));
-        document.head.appendChild(l);
-
-        var m1 = document.createElement('meta'); m1.name = 'apple-mobile-web-app-capable'; m1.content = 'yes';
-        var m2 = document.createElement('meta'); m2.name = 'apple-mobile-web-app-status-bar-style'; m2.content = 'black-translucent';
-        var m3 = document.createElement('meta'); m3.name = 'apple-mobile-web-app-title'; m3.content = 'HANAN.UANG';
-        document.head.appendChild(m1); document.head.appendChild(m2); document.head.appendChild(m3);
-        var ati = document.createElement('link'); ati.rel = 'apple-touch-icon'; ati.href = icon;
-        document.head.appendChild(ati);
-
         // Service worker hanya aktif saat di-hosting statis (GitHub Pages) — aman gagal diam
-        if ('serviceWorker' in navigator) {
+        if ('serviceWorker' in navigator && location.protocol === 'https:') {
           navigator.serviceWorker.register('service-worker.js').catch(function () {});
         }
       } catch (e) {}
